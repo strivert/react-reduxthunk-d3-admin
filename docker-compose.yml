@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  heartmonitor.build:
+    image: heartmonitor.build
+    volumes:
+       - .:/usr/src/app/
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: [sh, -c, "npm install && npm run buildprod"]
