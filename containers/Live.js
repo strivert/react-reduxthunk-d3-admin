@@ -46,9 +46,9 @@ class Live extends Component {
             messages: [],
             chartData: {},
             flagDetails: {
-                "DisplayBreathingPacer": false,
-                "DisplayHeartRate": false,
-                "DisplayCounter": false
+                displayBreathingPacer: false,
+                displayHeartRate: false,
+                displayCounter: false
             }
         }
 
@@ -94,21 +94,21 @@ class Live extends Component {
 
     handleBreadingPacer() {
 
-        this.state.flagDetails["DisplayBreathingPacer"] = !this.state.flagDetails["DisplayBreathingPacer"];
+        this.state.flagDetails.displayBreathingPacer = !this.state.flagDetails.displayBreathingPacer;
         this.state.flagHubConnection.invoke('sendFlags', {flagDetails: this.state.flagDetails});
-
+        
     }
 
     handleCounter() {
 
-        this.state.flagDetails["DisplayCounter"] = !this.state.flagDetails["DisplayCounter"];
+        this.state.flagDetails.displayCounter = !this.state.flagDetails.displayCounter;
         this.state.flagHubConnection.invoke('sendFlags', {flagDetails: this.state.flagDetails});
         console.log(this.state);
     }
 
     handleHeartRateDisplay() {
 
-        this.state.flagDetails["DisplayHeartRate"] = !this.state.flagDetails["DisplayHeartRate"];
+        this.state.flagDetails.displayHeartRate = !this.state.flagDetails.displayHeartRate;
         this.state.flagHubConnection.invoke('sendFlags', {flagDetails: this.state.flagDetails});
         console.log(this.state);
     }
@@ -190,7 +190,7 @@ class Live extends Component {
                                 <i className="fa fa-align-justify fa-5x" style={{color: '#10e322'}}></i>
                                 <div>
                                     <h4 className="m-b-10"> Show the client a Breathing Pacer </h4>
-                                    <Switch on={this.state.flagDetails["DisplayBreathingPacer"]} classes={'m-r-lg'} name="DisplayBreathingPacer" onChange={this.handleBreadingPacer} />
+                                    <Switch on={this.state.flagDetails.displayBreathingPacer} classes={'m-r-lg'} name="DisplayBreathingPacer" onChange={this.handleBreadingPacer} />
                                 </div>
                         </Panel>
                     </Col>
@@ -207,7 +207,7 @@ class Live extends Component {
                                 />
                             <div>
                                 <h4 className="m-b-none">Make the counter visibile to client</h4>
-                                <Switch on={this.state.flagDetails["DisplayCounter"]} name="DisplayCounter" classes={'m-r-lg'} onChange={this.handleCounter} />
+                                <Switch on={this.state.flagDetails.displayCounter} name="DisplayCounter" classes={'m-r-lg'} onChange={this.handleCounter} />
                             </div>
                         </Panel>
 
@@ -217,7 +217,7 @@ class Live extends Component {
                             <i className="fa fa-heartbeat fa-5x" style={{color: '#e04949'}}></i>
                             <div>
                                 <h4>Show Client its heart rate</h4>
-                                <Switch on={this.state.flagDetails["DisplayHeartRate"]} name="displayHeartRate" classes={'m-r-lg'} onChange={this.handleHeartRateDisplay} />
+                                <Switch on={this.state.flagDetails.displayHeartRate} name="displayHeartRate" classes={'m-r-lg'} onChange={this.handleHeartRateDisplay} />
                             </div>
                         </Panel>
                     </Col>

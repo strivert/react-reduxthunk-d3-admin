@@ -52,8 +52,8 @@ export default class Menu extends Component {
                       <i className="fa fa-bars"/>
                   </a>
                   <div className="text-center tophead">
-                      <img width="25" src="/dist/images/LOGOWHITE.png"/><br/>
-                      <span className="text-center" style={{lineHeight: "21px", fontWeight: "bold"}}>
+                      <img src="/dist/images/LOGOWHITE.png" /><br/>
+                      <span className="text-center" style={{lineHeight: "30px", fontWeight: "bold", fontSize: "15px"}}>
                 Admin
               </span>
                   </div>

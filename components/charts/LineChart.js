@@ -23,22 +23,25 @@ export default class LineChart extends React.Component {
       high: 100,
       low: 60,
       showArea: true,
-      height: '300px',
+      height: '330px',
       fullWidth: true,
       chartPadding: {
-        right: 50,
-        top:50
+        right: 0,
+        top:0
       },
       axisX : {
         showGrid: true
       },
       axisY: {
         showGrid: false
+      },
+      style: {
+        color: 'red'
       }
     };
 
     return (
-      <ReactChartist type="Line" className={'ct-chart'}  data={this.props.data} options={options} />
+      <ReactChartist type={"Line"} className={'ct-chart'}  data={this.props.data} options={options} />
     );
   }
 }

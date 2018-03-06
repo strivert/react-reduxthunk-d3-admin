@@ -19,6 +19,10 @@ export default class Profile extends Component {
           <span className="thumb-sm avatar pull-left">
             <img src={this.props.profile ? this.props.profile.avatar : ''}/>      
           </span>
+          <div className="user-info">
+            <h5>{this.props.profile.name}</h5>
+            <small style={{fontSize: '12px', textAlign: 'left', color: '#717171'}}>{this.props.profile.username}</small>
+          </div>
           <b className="caret"></b>
         </a>
         <ul className="dropdown-menu animated fadeInRight">

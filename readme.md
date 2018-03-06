@@ -31,6 +31,3 @@ Production (master)
 * [https://d2v2ckxfvw4ji3.cloudfront.net](https://d2v2ckxfvw4ji3.cloudfront.net)
 * [http://aws-website-biometricsdashboard-xp4dd.s3-website-us-east-1.amazonaws.com/](http://aws-website-biometricsdashboard-xp4dd.s3-website-us-east-1.amazonaws.com/) - Direct
 
-Quickstart configuration on AWS
-
-* [https://console.aws.amazon.com/quickstart-website/home](https://console.aws.amazon.com/quickstart-website/home)
