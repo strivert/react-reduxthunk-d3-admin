@@ -1,27 +1,33 @@
 image : claudiababescu/dotnet-core-aws-build
 stages:
   - build
-cache:
-  key: "$CI_JOB_NAME"
-  paths:
-    - node_modules/
-release:
+  - deploy
+
+build:
  stage: build
  script:
-  - echo $AWS_CREDENTIALS_JSON | base64 -d > aws-credentials.json
   - npm install
-  - npm run buildprod
+  - npx webpack --bail index.js dist/js/bundle.js --config webpack.config.production.js
   - grunt build
-  - npm run s3
- only:
-   - master
-dev:
- stage: build
+ artifacts:
+    paths:
+      - prod.html
+      - dist
+    expire_in: 1 week
+
+deploy_dev:
+ stage: deploy
  script:
   - echo $AWS_DEV_CREDENTIALS_JSON | base64 -d > aws-credentials.json
-  - npm install
-  - npm run buildprod
-  - grunt build
-  - npm run s3dev
+  - s3-upload aws-upload-dev.conf.js
  only:
    - develop
+   - ci
+
+deploy_prod:
+ stage: deploy
+ script:
+   - echo $AWS_CREDENTIALS_JSON | base64 -d > aws-credentials.json
+   - s3-upload
+ only:
+   - master

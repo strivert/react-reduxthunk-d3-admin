@@ -35,60 +35,28 @@ var shallowCompare = require('react-addons-shallow-compare');
 class Analytics extends Component {
   state = {
     flagDetails: {
-      displayBreathingPacer: false,
-      displayHeartRate: false,
-      displayCounter: false
-    },
-    shouldGaugeUpdate: false,
-    gaugePanelHeight: 330
+        displayBreathingPacer: false,
+        displayHeartRate: false,
+        displayCounter: false
+    }
   }
-
   shouldComponentUpdate(nextProps, nextState) {
     return shallowCompare(this, nextProps, nextState);
   }
-
-  updateDimensions() {
-    this.setState({
-      shouldGaugeUpdate: true
-    }, ()=>{
-      if (window.innerWidth > 590 && window.innerWidth < 990) {
-        this.setState({
-          gaugePanelHeight: 470,
-          shouldGaugeUpdate: false
-        })
-      } else  {
-        this.setState({
-          gaugePanelHeight: 330,
-          shouldGaugeUpdate: false
-        })
-      }
-    });
-  }
-  componentWillMount() {
-    this.updateDimensions();
-  }
-
-  componentDidMount() {
-    window.addEventListener("resize", this.updateDimensions.bind(this));
-  }
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateDimensions.bind(this));
-  }
-
 
   render() {
     const { dispatch } = this.props;
     let i = 0;
     return (
       <Page>
-        
+
         <Row>
           <Col size={8} classes={'no-padder-col'}>
               <Panel classes={'no-padder'}>
                 <div className="cnt-panel">
-                  <h4 className={'font-semibold'}>Heart Rate, DPM</h4>
+                  <h4 className={'font-semibold'}>Heart Rate, BPS</h4>
                 </div>
-                
+
                 <div className="separator" />
                 <div className="cnt-panel">
                   <LineChart data={{labels: ['20:15:7', '20:15:8', '20:15:9', '20:15:7', '20:15:10', '20:15:11', '20:15:12', '20:15:13', '20:15:10', '20:15:12'],
@@ -96,39 +64,38 @@ class Analytics extends Component {
                     [70, 80, 75, 85, 90, 80, 80, 85, 75, 95]
                     ]}} />
                 </div>
-              </Panel>            
+              </Panel>
           </Col>
           <Col size={4} classes={'no-padder-col'}>
               <Panel classes={'no-padder'}>
                 <div className="cnt-panel">
-                  <h4 className={'font-semibold'}>Heart Rate, DPM</h4>
+                  <h4 className={'font-semibold'}>Stress Levels (RR intervals, pupil dilation) </h4>
                 </div>
-                
+
                 <div className="separator" />
 
                 <div className="cnt-panel">
-                  <div style={{                      
-                      height: `${this.state.gaugePanelHeight}px`,
+                  <div style={{
+                      height: "330px",
                       marginTop: "-75px"
                   }}>
                       <ReactSpeedometer
-                        forceRender={this.state.shouldGaugeUpdate}
-                        fluidWidth={true}
-                        minValue={0}
-                        maxValue={100}
-                        value={92.45}
-                        needleColor="#464646"
-                        startColor="#9fdd00"
-                        endColor="#f54500"
-                        ringWidth={80}
-                        segments={60}
-                        textColor="#ffffff"
+                          fluidWidth={true}
+                          minValue={0}
+                          maxValue={100}
+                          value={92.45}
+                          needleColor="#464646"
+                          startColor="#9fdd00"
+                          endColor="#f54500"
+                          ringWidth={80}
+                          segments={100}
+                          textColor="#ffffff"
                       />
                   </div>
                   <div className="separator" style={{marginTop: '40px'}} />
                   <h3 style={{margin: 0, marginTop: '12px', textAlign: 'center'}}>92.45%</h3>
                 </div>
-              </Panel>            
+              </Panel>
           </Col>
         </Row>
 
@@ -141,8 +108,9 @@ class Analytics extends Component {
                     <Switch onClick={()=>{
                         this.setState({
                           flagDetails: {
-                            ...this.state.flagDetails,
-                            displayBreathingPacer: !this.state.flagDetails.displayBreathingPacer
+                            displayBreathingPacer: !this.state.flagDetails.displayBreathingPacer,
+                            displayHeartRate: this.state.flagDetails.displayHeartRate,
+                            displayCounter: this.state.flagDetails.displayCounter
                           }
                         });
                       }}
@@ -151,7 +119,7 @@ class Analytics extends Component {
                     />
                   </div>
                 </div>
-                
+
                 <div className="separator" />
 
                 <div className="cnt-panel">
@@ -164,7 +132,7 @@ class Analytics extends Component {
                     <p>Show the client a<br /> Breathing Stabilizer</p>
                   </div>
                 </div>
-              </Panel>            
+              </Panel>
           </Col>
           <Col size={4} classes={'no-padder-col'}>
               <Panel classes={'no-padder'}>
@@ -174,8 +142,9 @@ class Analytics extends Component {
                     <Switch onClick={()=>{
                         this.setState({
                           flagDetails: {
-                            ...this.state.flagDetails,
-                            displayHeartRate: !this.state.flagDetails.displayHeartRate
+                            displayBreathingPacer: this.state.flagDetails.displayBreathingPacer,
+                            displayHeartRate: !this.state.flagDetails.displayHeartRate,
+                            displayCounter: this.state.flagDetails.displayCounter
                           }
                         });
                       }}
@@ -184,7 +153,7 @@ class Analytics extends Component {
                     />
                   </div>
                 </div>
-                
+
                 <div className="separator" />
 
                 <div className="cnt-panel">
@@ -199,7 +168,7 @@ class Analytics extends Component {
                     <p>Make the Counter visible<br /> to client</p>
                   </div>
                 </div>
-              </Panel>            
+              </Panel>
           </Col>
           <Col size={4} classes={'no-padder-col'}>
               <Panel classes={'no-padder'}>
@@ -209,7 +178,8 @@ class Analytics extends Component {
                     <Switch onClick={()=>{
                         this.setState({
                           flagDetails: {
-                            ...this.state.flagDetails,
+                            displayBreathingPacer: this.state.flagDetails.displayBreathingPacer,
+                            displayHeartRate: this.state.flagDetails.displayHeartRate,
                             displayCounter: !this.state.flagDetails.displayCounter
                           }
                         });
@@ -219,7 +189,7 @@ class Analytics extends Component {
                     />
                   </div>
                 </div>
-                
+
                 <div className="separator" />
 
                 <div className="cnt-panel">
@@ -231,28 +201,28 @@ class Analytics extends Component {
                     <p>Show client its<br />Heart Rate</p>
                   </div>
                 </div>
-              </Panel>            
+              </Panel>
           </Col>
         </Row>
-        
+
         <Row>
           <Col size={12} classes={'no-padder-col'}>
             <Panel classes={'no-padder'}>
               <div className="cnt-panel">
                 <div className="flex justify-content-between">
-                  <h4 className={'font-semibold'}>Client Assessment</h4>                  
+                  <h4 className={'font-semibold'}>Client Assessment</h4>
                 </div>
               </div>
-              
+
               <div className="separator" />
 
               <div className="cnt-panel capture">
                 <textarea name="clientAssessment" rows="5"></textarea>
                 <div>
-                  <button className="btn btn-danger capture"><span className="text">CAPTURE</span></button>             
+                  <button className="btn btn-danger capture"><span className="text">CAPTURE</span></button>
                 </div>
               </div>
-            </Panel>            
+            </Panel>
           </Col>
         </Row>
 

@@ -75,47 +75,47 @@ class Dashboard extends Component {
       {
         img:
           "/dist/images/carousel/1.jpg",
-        desc: "Kwer Kerewr Lwerwe Kerew Kerer"
+        desc: "Coming soon"
       },
       {
         img:
           "/dist/images/carousel/2.jpg",
-        desc: "Viuer Lierwo Wivdvn sdmn mn mmn"
+        desc: "Coming soon"
       },
       {
         img:
           "/dist/images/carousel/3.jpg",
-        desc: "uwvm ocgmmo vjryzmhn jzzaj vqjmx"
+        desc: "Coming soon"
       },
       {
         img:
           "/dist/images/carousel/4.jpg",
-        desc: "pktcqk yjndvucs auotk xrw"
+        desc: "Enclosed Spaces"
       },
       {
         img:
           "/dist/images/carousel/5.jpg",
-        desc: "filknbqh mdhewvzu nqxj ey"
+        desc: "Enclosed Spaces"
       },
       {
         img:
           "/dist/images/carousel/6.jpg",
-        desc: "ieybj yvfktqbt vcfwai"
+        desc: "Enclosed Spaces"
       },
       {
         img:
           "/dist/images/carousel/1.jpg",
-        desc: "imbiow uyzmz lfow jjoht"
+        desc: "Coming soon"
       },
       {
         img:
           "/dist/images/carousel/2.jpg",
-        desc: "lluipgtm ojzaywpoj miqpuk"
+        desc: "Coming soon"
       },
       {
         img:
           "/dist/images/carousel/3.jpg",
-        desc: "jpjuaqv tpxvrmz vmtnkk xcivzlu"
+        desc: "Coming soon"
       }
     ];
 
@@ -177,7 +177,7 @@ class Dashboard extends Component {
           <Col size={12}>
             <Panel classes={"no-padder"}>
               <div className="col-md-3 summaryItem">
-                <h2 className="font-bold"> 1 </h2>
+                <h2 className="font-bold"> 3 </h2>
                 <p> Clients </p>
               </div>
               <div className="col-md-3 summaryItem">
@@ -189,7 +189,7 @@ class Dashboard extends Component {
                 <p> Clients Treated </p>
               </div>
               <div className="col-md-3 summaryItem">
-                <h2 className="font-bold"> 2 </h2>
+                <h2 className="font-bold"> 3 </h2>
                 <p> Returning Clients </p>
               </div>
             </Panel>

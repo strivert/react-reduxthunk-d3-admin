@@ -10,20 +10,10 @@ export default class GaugeChart extends React.Component {
     }
 
     render() {
-        let options = {
-            width: '300px',
-            donut: true,
-            donutWidth: 30,
-            donutSolid: true,
-            segments: 3,
-            needleTransition: "easeElastic",
-            startAngle: 270,
-            total: 200,
-            showLabel: false
-        };
-
         return (
-            <ReactSpeedometer />
+            <ReactSpeedometer
+                {...this.props.options}
+            />
         );
     }
 }

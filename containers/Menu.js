@@ -92,10 +92,10 @@ export default class Menu extends Component {
                                       currentPage={this.props.currentPage}
                                   />
                                   <MenuItem
-                                      link={"/analytics"}
+                                      link={"/live"}
                                       icon="fa-line-chart"
                                       color="bg-success"
-                                      linkText="Analytics"
+                                      linkText="Live Session"
                                       currentPage={this.props.currentPage}
                                   />
                               </ul>

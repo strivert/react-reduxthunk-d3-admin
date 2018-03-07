@@ -126,8 +126,8 @@ export default class Root extends Component {
             <Route
               path="/analytics"
               component={Analytics}
-              pageName="Analytics"
-              pageDescription="Simple analytics example."
+              pageName="Live Session"
+              pageDescription="Live Stats."
             />
 
             <Route

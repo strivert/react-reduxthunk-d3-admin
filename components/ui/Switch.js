@@ -30,11 +30,11 @@ class Switch extends Component {
 
   render() {
     var switchStyleOn = {
-      borderColor: "rgb(121, 212, 167)",
-      boxShadow: "rgb(121, 212, 167) 0px 0px 0px 0px inset",
+      borderColor: "rgb(232, 232, 232)",
+      boxShadow: "rgb(232, 232, 232) 0px 0px 0px 0px inset",
       transition: "border 0.4s, box-shadow 0.4s, background-color 1.2s",
       WebkitTransition: "border 0.4s, box-shadow 0.4s, background-color 1.2s",
-      backgroundColor: "rgb(121, 212, 167)"
+      backgroundColor: "rgb(232, 232, 232)"
     };
 
     var switchStyleOff = {
@@ -44,14 +44,15 @@ class Switch extends Component {
     };
 
     var buttonStyleOn = {
-      left: 13,
+      left: 33,
       transition: "left 0.2s",
       WebkitTransition: "left 0.2s",
-      backgroundColor: "rgb(255, 255, 255)"
+      backgroundColor: "rgb(234, 90, 57)"
     };
 
     var buttonStyleOff = {
-      left: 0
+      left: 0,
+      backgroundColor: "rgb(255, 255, 255)"
     };
 
     return (

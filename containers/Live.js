@@ -8,7 +8,7 @@
  * @providesModule Charts
  */
 
-import React, { Component } from 'react';
+import React,{ Component, ReactDOM } from 'react';
 import { connect } from 'react-redux';
 import { Link, browserHistory } from 'react-router';
 import { Button } from '../components/ui';
@@ -20,7 +20,8 @@ let Factory = ModalFactory.modalFromFactory;
 
 import LineChart from '../components/charts/LineChart';
 import EasyPie from '../components/charts/EasyPie';
-import ReactSpeedometer from 'react-d3-speedometer';
+import DonutChart from '../components/charts/DonutChart';
+import GaugeChart from '../components/charts/GaugeChart';
 import HorizontalSlider from '../components/slider/HorizontalSlider';
 
 import {Fa, I, Pager, SearchBox ,IStack} from '../components/ui/';
@@ -30,12 +31,13 @@ import Switch from '../components/ui/Switch';
 import {Row, Col, Page} from '../components/ui/Layout';
 import ProgressBar from '../components/charts/ProgressBar';
 
+
+
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
 import {HEARTRATES_HUB_LOAD_BALANCER, FLAG_HUB_LOAD_BALANACER, DASHBOARD_ROLE, UNITY_ROLE} from "../constants/config";
 import {HubConnection} from "@aspnet/signalr-client/dist/src/index";
 var shallowCompare = require('react-addons-shallow-compare');
-
 
 class Live extends Component {
 
@@ -46,10 +48,12 @@ class Live extends Component {
             messages: [],
             chartData: {},
             flagDetails: {
-                displayBreathingPacer: false,
-                displayHeartRate: false,
-                displayCounter: false
-            }
+                "DisplayBreathingPacer": false,
+                "DisplayHeartRate": false,
+                "DisplayCounter": false
+            },
+            shouldGaugeUpdate: false,
+            gaugePanelHeight: 330
         }
 
         this.fetchHeartRate = this.fetchHeartRate.bind(this);
@@ -62,12 +66,38 @@ class Live extends Component {
     componentDidMount() {
         this.fetchHeartRate();
         this.fetchFlagHub();
+        window.addEventListener("resize", this.updateDimensions.bind(this));
+    }
 
+    componentWillMount() {
+        this.updateDimensions();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions.bind(this));
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         return shallowCompare(this, nextProps, nextState);
     }
+
+    updateDimensions() {
+        this.setState({
+          shouldGaugeUpdate: true
+        }, ()=>{
+          if (window.innerWidth > 590 && window.innerWidth < 990) {
+            this.setState({
+              gaugePanelHeight: 470,
+              shouldGaugeUpdate: false
+            })
+          } else  {
+            this.setState({
+              gaugePanelHeight: 330,
+              shouldGaugeUpdate: false
+            })
+          }
+        });
+      }
 
     fetchFlagHub() {
         const flagHubConnection = new HubConnection(FLAG_HUB_LOAD_BALANACER);
@@ -94,21 +124,21 @@ class Live extends Component {
 
     handleBreadingPacer() {
 
-        this.state.flagDetails.displayBreathingPacer = !this.state.flagDetails.displayBreathingPacer;
+        this.state.flagDetails["DisplayBreathingPacer"] = !this.state.flagDetails["DisplayBreathingPacer"];
         this.state.flagHubConnection.invoke('sendFlags', {flagDetails: this.state.flagDetails});
-        
+
     }
 
     handleCounter() {
 
-        this.state.flagDetails.displayCounter = !this.state.flagDetails.displayCounter;
+        this.state.flagDetails["DisplayCounter"] = !this.state.flagDetails["DisplayCounter"];
         this.state.flagHubConnection.invoke('sendFlags', {flagDetails: this.state.flagDetails});
         console.log(this.state);
     }
 
     handleHeartRateDisplay() {
 
-        this.state.flagDetails.displayHeartRate = !this.state.flagDetails.displayHeartRate;
+        this.state.flagDetails["DisplayHeartRate"] = !this.state.flagDetails["DisplayHeartRate"];
         this.state.flagHubConnection.invoke('sendFlags', {flagDetails: this.state.flagDetails});
         console.log(this.state);
     }
@@ -164,83 +194,173 @@ class Live extends Component {
 
             <Page>
                 <Row>
-                    <Col size="8" classes={'text-center'}>
-                        <Panel title="Heart Rate, bpm">
+                    <Col size={8} classes={'no-padder-col'}>
+                        <Panel classes={'no-padder'}>
+                            <div className="cnt-panel">
+                                <h4 className={'font-semibold'}>Heart Rate, BPS</h4>
+                            </div>
+
+                            <div className="separator" />
+                            <div className="cnt-panel">
 
                             <LineChart data={this.state.chartData} />
 
-                        </Panel>
-                    </Col>
-                    <Col size="4" classes="text-center m-b-lg">
-                        <Panel title="Stress Levels (Heart Rate and pupil dialation)">
-                            <ReactSpeedometer
-                                maxValue={600}
-                                value={473}
-                                needleColor="steelblue"
-                                segments={3}
-                                textColor="white"
-                            />
+                            </div>
                         </Panel>
 
                     </Col>
-                </Row>
-                <Row>
-                    <Col size="4" classes={'text-center'}>
-                        <Panel title="Breathing Pacer">
-                                <i className="fa fa-align-justify fa-5x" style={{color: '#10e322'}}></i>
-                                <div>
-                                    <h4 className="m-b-10"> Show the client a Breathing Pacer </h4>
-                                    <Switch on={this.state.flagDetails.displayBreathingPacer} classes={'m-r-lg'} name="DisplayBreathingPacer" onChange={this.handleBreadingPacer} />
+                    <Col size={4} classes={'no-padder-col'}>
+                        <Panel classes={'no-padder'}>
+                            <div className="cnt-panel">
+                                <h4 className={'font-semibold'}>Stress Levels (RR intervals, pupil dilation) </h4>
+                            </div>
+
+                            <div className="separator" />
+
+                            <div className="cnt-panel">
+                                <div style={{
+                                    height: `${this.state.gaugePanelHeight}px`,
+                                    marginTop: "-75px"
+                                }}>
+                                    <GaugeChart
+                                        options = {{
+                                            forceRender: this.state.shouldGaugeUpdate,
+                                            fluidWidth: true,
+                                            minValue: 0,
+                                            maxValue: 100,
+                                            value: 92.45,
+                                            needleColor: "#464646",
+                                            startColor: "#9fdd00",
+                                            endColor: "#f54500",
+                                            ringWidth: 80,
+                                            segments: 100,
+                                            textColor: "#ffffff"
+                                        }}
+                                    />
                                 </div>
-                        </Panel>
-                    </Col>
-                    <Col size="4" classes={'text-center'}>
-                        <Panel title="Counter">
-                            <EasyPie
-                                    size={100}
-                                    barColor={'#36a9ae'}
-                                    trackColor={'#fbfbfb'}
-                                    lineWidth={15}
-                                    percent={1}
-                                    fontSize='16px'
-                                    theme="honeycomb_light"
-                                />
-                            <div>
-                                <h4 className="m-b-none">Make the counter visibile to client</h4>
-                                <Switch on={this.state.flagDetails.displayCounter} name="DisplayCounter" classes={'m-r-lg'} onChange={this.handleCounter} />
+                                <div className="separator" style={{marginTop: '40px'}} />
+                                <h3 style={{margin: 0, marginTop: '12px', textAlign: 'center'}}>92.45%</h3>
                             </div>
                         </Panel>
-
                     </Col>
-                    <Col size="4" classes={'text-center'}>
-                        <Panel title="Show Heart Rate">
-                            <i className="fa fa-heartbeat fa-5x" style={{color: '#e04949'}}></i>
-                            <div>
-                                <h4>Show Client its heart rate</h4>
-                                <Switch on={this.state.flagDetails.displayHeartRate} name="displayHeartRate" classes={'m-r-lg'} onChange={this.handleHeartRateDisplay} />
+                </Row>
+                <Row>
+
+                    <Col size={4} classes={'no-padder-col'}>
+                        <Panel classes={'no-padder'}>
+                            <div className="cnt-panel">
+                                <div className="flex justify-content-between">
+                                    <h4 className={'font-semibold'}>Breathing Stabilizer</h4>
+                                    <Switch on={this.state.flagDetails["DisplayBreathingPacer"]} className="switch-custom" name="DisplayBreathingPacer" onChange={this.handleBreadingPacer} />
+                                </div>
+                            </div>
+
+                            <div className="separator" />
+
+                            <div className="cnt-panel">
+                                <div className="cnt-panel-center">
+                                    <div className="cnt-back first"></div>
+                                    <div className="cnt-back second"></div>
+                                    <div className="cnt-back third"></div>
+                                </div>
+                                <div className="cnt-panel-desc">
+                                    <p>Show the client a<br /> Breathing Stabilizer</p>
+                                </div>
+                            </div>
+                        </Panel>
+                    </Col>
+                    <Col size={4} classes={'no-padder-col'}>
+                        <Panel classes={'no-padder'}>
+                            <div className="cnt-panel">
+                                <div className="flex justify-content-between">
+                                    <h4 className={'font-semibold'}>Counter</h4>
+                                    <Switch on={this.state.flagDetails["DisplayCounter"]} className="switch-custom" name="DisplayCounter" onChange={this.handleCounter} />
+                                </div>
+                            </div>
+
+                            <div className="separator" />
+
+                            <div className="cnt-panel">
+                                <div className="cnt-panel-center counter">
+                                    <div className="cnt-panel-center" style={{display: 'flex', justifyContent: 'center'}}>
+                                        <DonutChart height="90" options={{
+                                            angle: 0.5,
+                                            lineWidth: 0.1,
+                                            radiusScale: 0.9,
+                                            pointer: {
+                                                length: 0.6,
+                                                strokeWidth: 0.035,
+                                                color: '#000000'
+                                            },
+                                            limitMax: false,
+                                            limitMin: false,
+                                            colorStart: '#ea5a39',
+                                            colorStop: '#ea5a39',
+                                            strokeColor: '#eff0f5',
+                                            generateGradient: true,
+                                            highDpiSupport: true,
+                                        }} max="100" value="4"/>
+                                    </div>
+                                </div>
+                                <div className="cnt-panel-desc">
+                                    <p>Make the Counter visible<br /> to client</p>
+                                </div>
+                            </div>
+                        </Panel>
+                    </Col>
+
+
+                    <Col size={4} classes={'no-padder-col'}>
+                        <Panel classes={'no-padder'}>
+                            <div className="cnt-panel">
+                                <div className="flex justify-content-between">
+                                    <h4 className={'font-semibold'}>Show Heart Rate</h4>
+                                    <Switch on={this.state.flagDetails["DisplayHeartRate"]} name="displayHeartRate" className="switch-custom" onChange={this.handleHeartRateDisplay} />
+                                </div>
+                            </div>
+
+                            <div className="separator" />
+
+                            <div className="cnt-panel">
+                                <div className="cnt-panel-center heart">
+                                    <div className="cnt-back first">
+                                    </div>
+                                </div>
+                                <div className="cnt-panel-desc">
+                                    <p>Show client its<br />Heart Rate</p>
+                                </div>
                             </div>
                         </Panel>
                     </Col>
                 </Row>
 
                 <Row>
-                    <Col size="12" classes={'text-center'}>
-                        <Panel title="Client Assessment">
+                    <Col size={12} classes={'no-padder-col'}>
+                        <Panel classes={'no-padder'}>
+                            <div className="cnt-panel">
+                                <div className="flex justify-content-between">
+                                    <h4 className={'font-semibold'}>Client Assessment</h4>
+                                </div>
+                            </div>
 
-                            <textarea rows="4" cols="50">
-                                Client self-declaration etc.
-                            </textarea>
+                            <div className="separator" />
 
+                            <div className="cnt-panel capture">
+                                <textarea name="clientAssessment" rows="5"></textarea>
+                                <div>
+                                    <button className="btn btn-danger capture"><span className="text">CAPTURE</span></button>
+                                </div>
+                            </div>
                         </Panel>
-                        <Button type="submit" label="Capture" color="btn-success" />
                     </Col>
                 </Row>
+
                 <footer id="footer">
                     <div className="bg-dark dker wrapper">
                         <div className="container text-center m-t-lg">
                             <div className="m-t-xl m-b-xl">
                                 <h4>Absolute Marmot</h4>
-                                <p>&copy;Copyright Absolute Marmot 2018. All rights reserved.</p>
+                                <p>&copy;Copyright Absolute Marmot 2018-present. All rights reserved.</p>
                                 <p>
                                     <a href="#top" className="btn btn-icon btn-rounded btn-dark b-dark bg-empty m-sm text-muted">
                                         <i className="fa fa-angle-up"></i></a>
