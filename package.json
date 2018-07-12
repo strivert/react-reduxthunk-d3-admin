@@ -15,8 +15,6 @@
     "start": "node server.js",
     "watch": "npm-watch"
   },
-  "author": "Andrew Wilson <andrew@lightsinthesky.io> (http://lightsinthesky.io/)",
-  "license": "LicenseRef-LICENSE",
   "dependencies": {
     "@aspnet/signalr-client": "^1.0.0-alpha2-final",
     "axios": "^0.5.4",
